@@ -35,25 +35,29 @@ class Window(Frame):
         filename = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select BMP File", filetypes=[("BMP Files","*.bmp")])
         if not filename:
             return # user cancelled; stop this method
-
+        contents=0
         self.canvas.delete('all')
-        self.load = Image.open(filename)
-        w, h = self.load.size
-        self.render = ImageTk.PhotoImage(self.load) #must keep a reference to this
+        with open(filename,"rb") as f:
+            contents = f.read()
+            self.load = Image.open(filename)
+            w, h = self.load.size
+            self.render = ImageTk.PhotoImage(self.load) #must keep a reference to this
 
-        if self.load is not None: # if an image was already loaded
-            self.canvas.delete(self.load) # remove the previous image
-        
-        label = Label(root, text="Original", image=self.render, compound='top')
-        self.canvas.create_window(300, 300, window=label)
-        root.geometry("%dx%d" % (w, h))
+            if self.load is not None: # if an image was already loaded
+                self.canvas.delete(self.load) # remove the previous image
+            
+            label = Label(root, text="Original", image=self.render, compound='top')
+            self.canvas.create_window(300, 300, window=label)
+            root.geometry("%dx%d" % (w, h))
+            
+        return contents
 
     #Function for open bmp file
     def openFileText(self):
         filename = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select text File", filetypes=[("text Files","*.txt")])
         if not filename:
             return # user cancelled; stop this method
-
+        contents=""
         self.canvas.delete('all')
         #Read file
         with open(filename) as f:
@@ -67,38 +71,39 @@ class Window(Frame):
             self.canvas.create_window(250, 100, window=T)
             # Insert The Fact.
             T.insert(END, contents)
+        return contents
 
     #Function for encrypt bmp file use ECB mode
     def EncryptBMP_ECB(self):
-        self.openFileBMP()
+        Plaindata=self.openFileBMP()
     
     #Function for encrypt bmp file use ECB mode
     def EncryptBMP_CBC(self):
-        self.openFileBMP()
+        Plaindata=self.openFileBMP()
     
     #Function for encrypt bmp file use ECB mode
     def DecryptBMP_ECB(self):
-        self.openFileBMP()
+        Plaindata=self.openFileBMP()
     
     #Function for encrypt bmp file use ECB mode
     def DecryptBMP_CBC(self):
-        self.openFileBMP()
+        Plaindata=self.openFileBMP()
 
     #Function for encrypt Text file use ECB mode
     def EncryptText_ECB(self):
-        self.openFileText()
+        Plaindata=self.openFileText()
     
     #Function for encrypt Text file use ECB mode
     def EncryptText_CBC(self):
-        self.openFileText()
+        Plaindata=self.openFileText()
     
     #Function for encrypt Text file use ECB mode
     def DecryptText_ECB(self):
-        self.openFileText()
+        Plaindata=self.openFileText()
     
     #Function for encrypt Text file use ECB mode
     def DecryptText_CBC(self):
-        self.openFileText()
+        Plaindata=self.openFileText()
 
 root = Tk()
 root.geometry("%dx%d" % (300, 300))
