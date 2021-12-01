@@ -22,8 +22,8 @@ class Window(Frame):
 
         text_menu = Menu(menu)
         text_menu.add_command(label="Encrypt txt file (ECB)", command=self.EncryptText_ECB)
-        text_menu.add_command(label="Decrypt txt file (ECB)", command=self.EncryptText_CBC)
-        text_menu.add_command(label="Encrypt txt file (CBC)", command=self.DecryptText_ECB)
+        text_menu.add_command(label="Decrypt txt file (ECB)", command=self.DecryptText_ECB)
+        text_menu.add_command(label="Encrypt txt file (CBC)", command=self.EncryptText_CBC)
         text_menu.add_command(label="Decrypt txt file (CBC)", command=self.DecryptText_CBC)
         menu.add_cascade(label="text file", menu=text_menu)
 
