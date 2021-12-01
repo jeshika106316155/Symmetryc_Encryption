@@ -93,36 +93,36 @@ class SelfAES:
     def ecb_encrypt(self, s, key: bytes = b'1234567890123456', round_time: int = 5):
         assert len(key) == 16
         assert len(s) % 16 == 0
-        for i in range(round_time):
-            ret = bytearray()
-            for index in range(0, len(s), 16):
-                pro = s[index:index + 16]
-                matrix_pro = self.bytes2matrix(pro)
+
+        ret = bytearray()
+        for index in range(0, len(s), 16):
+            pro = s[index:index + 16]
+            matrix_pro = self.bytes2matrix(pro)
+            for i in range(round_time):
                 self.shift_rows(matrix_pro)
                 matrix_pro = self.sub_bytes(matrix_pro)
                 matrix_pro = self.add_round_key(matrix_pro, self.bytes2matrix(key))
-                matrix_pro = self.matrix2bytes(matrix_pro)
-                matrix_pro = bytearray(matrix_pro)
-                ret += matrix_pro
-            s = bytes(ret)
+            matrix_pro = self.matrix2bytes(matrix_pro)
+            matrix_pro = bytearray(matrix_pro)
+            ret += matrix_pro
+        s = bytes(ret)
         return s
 
     def ecb_decrypt(self, s, key: bytes = b'1234567890123456', round_time: int = 5):
         assert len(key) == 16
         assert len(s) % 16 == 0
-
-        for i in range(round_time):
-            ret = bytearray()
-            for index in range(0, len(s), 16):
-                pro = s[index:index + 16]
-                matrix_pro = self.bytes2matrix(pro)
+        ret = bytearray()
+        for index in range(0, len(s), 16):
+            pro = s[index:index + 16]
+            matrix_pro = self.bytes2matrix(pro)
+            for i in range(round_time):
                 matrix_pro = self.add_round_key(matrix_pro, self.bytes2matrix(key))
                 matrix_pro = self.sub_bytes(matrix_pro, sub_bytes_box=self.inv_s_box)
                 self.inv_shift_rows(matrix_pro)
-                matrix_pro = self.matrix2bytes(matrix_pro)
-                matrix_pro = bytearray(matrix_pro)
-                ret += matrix_pro
-            s = bytes(ret)
+            matrix_pro = self.matrix2bytes(matrix_pro)
+            matrix_pro = bytearray(matrix_pro)
+            ret += matrix_pro
+        s = bytes(ret)
         return s
 
     def cbc_encrypt(self, s, key: bytes = b'1234567890123456', round_time: int = 5, iv: bytes = b'2345678901234561'):
