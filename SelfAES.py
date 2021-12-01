@@ -63,6 +63,33 @@ class SelfAES:
     def sub_bytes(self, s, sub_bytes_box=s_box):
         return [[int(sub_bytes_box[a]) for a in row] for row in s]
 
+    ## @param bytestring    The padded bytestring for which the padding is to be removed.
+    ## @param k             The padding block size.
+    # @exception ValueError Raised when the input padding is missing or corrupt.
+    # @return bytestring    Original unpadded bytestring.
+    def unpad(self, bytestring, k=16):
+        """
+        Remove the PKCS#7 padding from a text bytestring.
+        """
+
+        val = bytestring[-1]
+        if val > k:
+            raise ValueError('Input is not padded or padding is corrupt')
+        l = len(bytestring) - val
+        return bytestring[:l]
+
+    ## @param bytestring    The text to encode.
+    ## @param k             The padding block size.
+    # @return bytestring    The padded bytestring.
+    def pad(self, bytestring, k=16):
+        """
+        Pad an input bytestring according to PKCS#7
+
+        """
+        l = len(bytestring)
+        val = k - (l % k)
+        return bytestring + bytearray([val] * val)
+
     def ecb_encrypt(self, s, key: bytes = b'1234567890123456', round_time: int = 5):
         assert len(key) == 16
         assert len(s) % 16 == 0
