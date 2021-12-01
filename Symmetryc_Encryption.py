@@ -3,6 +3,7 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 from SelfAES import *
 import os
+import base64
 
 
 class Window(Frame):
@@ -122,19 +123,48 @@ class Window(Frame):
 
     # Function for encrypt Text file use ECB mode
     def EncryptText_ECB(self):
-        Plaindata = self.openFileText()
+        plain_text = self.openFileText()
+        plain_text = plain_text.encode(encoding="utf-8")
+        self_aes = SelfAES()
+        pad_plain_text = self_aes.pad(plain_text)
+        cipher_text = self_aes.ecb_encrypt(pad_plain_text)
+        cipher_text_b64 = base64.b64encode(cipher_text)
+        with open("test_1_ecb.txt", "w") as f:
+            f.write(cipher_text_b64.decode('ascii'))
 
     # Function for encrypt Text file use ECB mode
     def EncryptText_CBC(self):
-        Plaindata = self.openFileText()
+        plain_text = self.openFileText()
+        plain_text = plain_text.encode(encoding="utf-8")
+        self_aes = SelfAES()
+        pad_plain_text = self_aes.pad(plain_text)
+        cipher_text = self_aes.cbc_encrypt(pad_plain_text)
+        cipher_text_b64 = base64.b64encode(cipher_text)
+        with open("test_1_cbc.txt", "w") as f:
+            f.write(cipher_text_b64.decode('ascii'))
 
     # Function for encrypt Text file use ECB mode
     def DecryptText_ECB(self):
-        Plaindata = self.openFileText()
+        cipher_text_b64 = self.openFileText()
+        cipher_text = base64.b64decode(cipher_text_b64)
+        self_aes = SelfAES()
+        pad_plain_text = self_aes.ecb_decrypt(cipher_text)
+        plain_text = self_aes.unpad(pad_plain_text)
+        plain_text = plain_text.decode("utf-8")
+        with open("test_1_ecb_return.txt", "w") as f:
+            f.write(plain_text)
+
 
     # Function for encrypt Text file use ECB mode
     def DecryptText_CBC(self):
-        Plaindata = self.openFileText()
+        cipher_text_b64 = self.openFileText()
+        cipher_text = base64.b64decode(cipher_text_b64)
+        self_aes = SelfAES()
+        pad_plain_text = self_aes.cbc_decrypt(cipher_text)
+        plain_text = self_aes.unpad(pad_plain_text)
+        plain_text = plain_text.decode("utf-8")
+        with open("test_1_cbc_return.txt", "w") as f:
+            f.write(plain_text)
 
 
 root = Tk()
