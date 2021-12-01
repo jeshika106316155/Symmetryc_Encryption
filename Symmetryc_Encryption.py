@@ -77,6 +77,30 @@ class Window(Frame):
             T.insert(END, contents)
         return contents
 
+    # Function for open bmp image
+    def Display_BMP(self,filename):
+        with open(filename, "rb") as f:
+            contents = f.read()
+            self.load2 = Image.open(filename)
+            w, h = self.load2.size
+            self.render2 = ImageTk.PhotoImage(self.load2)  # must keep a reference to this
+
+            label2 = Label(root, text="Cipher", image=self.render2, compound='top')
+            self.canvas.create_window(900, 300, window=label2)
+
+    # Function for display text (.txt) file
+    def Display_Text(self,filename):
+        with open(filename) as f:
+            contents = f.read()
+            # print(contents)
+            # Create text widget and specify size.
+            T2 = Text(root, height=5, width=52)
+            label4 = Label(root, text="Cipher", compound='top')
+            self.canvas.create_window(900, 30, window=label4)
+            self.canvas.create_window(900, 100, window=T2)
+            # Insert The Fact.
+            T2.insert(END, contents)
+
     # Function for encrypt bmp file use ECB mode
     def EncryptBMP_ECB(self):
         plain_data = self.openFileBMP()
@@ -87,6 +111,7 @@ class Window(Frame):
         cipher_data = plain_data[0:64] + cipher_data + plain_data[-need_trim:]
         with open("tux_ecb.bmp", "wb") as f:
             f.write(cipher_data)
+        self.Display_BMP("tux_ecb.bmp")
 
     # Function for encrypt bmp file use ECB mode
     def EncryptBMP_CBC(self):
@@ -98,6 +123,7 @@ class Window(Frame):
         cipher_data = plain_data[0:64] + cipher_data + plain_data[-need_trim:]
         with open("tux_cbc.bmp", "wb") as f:
             f.write(cipher_data)
+        self.Display_BMP("tux_cbc.bmp")
 
     # Function for encrypt bmp file use ECB mode
     def DecryptBMP_ECB(self):
@@ -109,6 +135,7 @@ class Window(Frame):
         plain_data = cipher_data[0:64] + plain_data + cipher_data[-need_trim:]
         with open("tux_ecb_return.bmp", "wb") as f:
             f.write(plain_data)
+        self.Display_BMP("tux_ecb_return.bmp")
 
     # Function for encrypt bmp file use ECB mode
     def DecryptBMP_CBC(self):
@@ -120,6 +147,7 @@ class Window(Frame):
         plain_data = cipher_data[0:64] + plain_data + cipher_data[-need_trim:]
         with open("tux_cbc_return.bmp", "wb") as f:
             f.write(plain_data)
+        self.Display_BMP("tux_cbc_return.bmp")
 
     # Function for encrypt Text file use ECB mode
     def EncryptText_ECB(self):
@@ -131,6 +159,7 @@ class Window(Frame):
         cipher_text_b64 = base64.b64encode(cipher_text)
         with open("test_1_ecb.txt", "w") as f:
             f.write(cipher_text_b64.decode('ascii'))
+        self.Display_Text("test_1_ecb.txt")
 
     # Function for encrypt Text file use ECB mode
     def EncryptText_CBC(self):
@@ -142,6 +171,7 @@ class Window(Frame):
         cipher_text_b64 = base64.b64encode(cipher_text)
         with open("test_1_cbc.txt", "w") as f:
             f.write(cipher_text_b64.decode('ascii'))
+        self.Display_Text("test_1_cbc.txt")
 
     # Function for encrypt Text file use ECB mode
     def DecryptText_ECB(self):
@@ -153,7 +183,7 @@ class Window(Frame):
         plain_text = plain_text.decode("utf-8")
         with open("test_1_ecb_return.txt", "w") as f:
             f.write(plain_text)
-
+        self.Display_Text("test_1_ecb_return.txt")
 
     # Function for encrypt Text file use ECB mode
     def DecryptText_CBC(self):
@@ -165,7 +195,7 @@ class Window(Frame):
         plain_text = plain_text.decode("utf-8")
         with open("test_1_cbc_return.txt", "w") as f:
             f.write(plain_text)
-
+        self.Display_Text("test_1_cbc_return.txt")
 
 root = Tk()
 root.geometry("%dx%d" % (300, 300))
